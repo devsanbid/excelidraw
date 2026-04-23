@@ -1,0 +1,9 @@
+--- packages/excalidraw/components/App.tsx
++++ packages/excalidraw/components/App.tsx
+@@ -5369,6 +5369,7 @@
+     if (event.key === KEYS.ALT && this.isAltDrawing) {
+       this.isAltDrawing = false;
+       if (this.lastPointerMoveEvent) {
++        console.log("Synthesizing pointerup event!");
+         const ev = new PointerEvent("pointerup", { pointerId: this.lastPointerMoveEvent.pointerId || 1, 
+           clientX: this.lastPointerMoveEvent.clientX,
