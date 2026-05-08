@@ -637,7 +637,7 @@ export const getSnapOutlineMidPoint = (
   const candidate = sideMidpoints.find(
     (midpoint) =>
       pointDistance(point, midpoint) <=
-        maxBindingDistance_simple(zoom) + element.strokeWidth / 2 &&
+        maxBindingDistance_simple(zoom) + Math.abs(element.strokeWidth) / 2 &&
       !hitElementItself({
         point,
         element,

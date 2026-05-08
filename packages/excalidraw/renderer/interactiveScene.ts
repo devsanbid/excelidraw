@@ -302,7 +302,7 @@ const renderBindingHighlightForBindableElement_simple = (
       context.translate(suggestedBinding.element.x, suggestedBinding.element.y);
 
       context.lineWidth =
-        clamp(1.75, suggestedBinding.element.strokeWidth, 4) /
+        clamp(1.75, Math.abs(suggestedBinding.element.strokeWidth), 4) /
         Math.max(0.25, appState.zoom.value);
       context.strokeStyle =
         appState.theme === THEME.DARK
@@ -514,7 +514,7 @@ const renderBindingHighlightForBindableElement_simple = (
       const midpointRadius = 4 / appState.zoom.value;
       const highlightThreshold =
         maxBindingDistance_simple(appState.zoom) +
-        suggestedBinding.element.strokeWidth / 2;
+        Math.abs(suggestedBinding.element.strokeWidth) / 2;
 
       midpoints.forEach((midpoint, idx) => {
         const isHighlighted =
@@ -571,7 +571,7 @@ const renderBindingHighlightForBindableElement_complex = (
     BIND_MODE_TIMEOUT -
     (state?.runtime ?? (countdownInProgress ? 0 : BIND_MODE_TIMEOUT));
   const opacity = clamp((1 / BIND_MODE_TIMEOUT) * remainingTime, 0.0001, 1);
-  const offset = element.strokeWidth / 2;
+  const offset = Math.abs(element.strokeWidth) / 2;
 
   const enclosingFrame = element.frameId && allElementsMap.get(element.frameId);
   if (enclosingFrame && isFrameLikeElement(enclosingFrame)) {
@@ -643,7 +643,7 @@ const renderBindingHighlightForBindableElement_complex = (
       );
 
       context.lineWidth =
-        clamp(2.5, element.strokeWidth * 1.75, 4) /
+        clamp(2.5, Math.abs(element.strokeWidth) * 1.75, 4) /
         Math.max(0.25, appState.zoom.value);
       context.strokeStyle =
         appState.theme === THEME.DARK

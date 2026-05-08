@@ -1,6 +1,6 @@
-const fs = require('fs');
-const path = 'packages/excalidraw/components/App.tsx';
-let content = fs.readFileSync(path, 'utf8');
+const fs = require("fs");
+const path = "packages/excalidraw/components/App.tsx";
+let content = fs.readFileSync(path, "utf8");
 
 content = content.replace(
   `target: this.interactiveCanvas,`,
@@ -11,7 +11,7 @@ content = content.replace(
           nodeType: 1,
           tagName: 'CANVAS',
           parentElement: this.interactiveCanvas?.parentElement,
-        },`
+        },`,
 );
 
 fs.writeFileSync(path, content);

@@ -49,7 +49,7 @@ import { getShortcutKey } from "../shortcut";
 
 import { register } from "./register";
 
-import type { AppState, Offsets } from "../types";
+import type { AppState, Offsets, NormalizedZoomValue } from "../types";
 
 export const actionChangeViewBackgroundColor = register<Partial<AppState>>({
   name: "changeViewBackgroundColor",
@@ -108,6 +108,7 @@ export const actionClearCanvas = register({
       ),
       appState: {
         ...getDefaultAppState(),
+        zoom: { value: 0.5 as NormalizedZoomValue },
         files: {},
         theme: appState.theme,
         penMode: appState.penMode,

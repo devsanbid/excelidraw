@@ -1,6 +1,6 @@
-const fs = require('fs');
-const path = 'packages/excalidraw/components/App.tsx';
-let content = fs.readFileSync(path, 'utf8');
+const fs = require("fs");
+const path = "packages/excalidraw/components/App.tsx";
+let content = fs.readFileSync(path, "utf8");
 
 content = content.replace(
   `        const reactEvent = {
@@ -36,7 +36,7 @@ content = content.replace(
           target: this.interactiveCanvas,
           type: 'pointerup'
         };
-        this.handleCanvasPointerUp(reactEvent as any);`
+        this.handleCanvasPointerUp(reactEvent as any);`,
 );
 
 fs.writeFileSync(path, content);

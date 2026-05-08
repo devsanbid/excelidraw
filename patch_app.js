@@ -1,6 +1,6 @@
-const fs = require('fs');
-const path = 'packages/excalidraw/components/App.tsx';
-let content = fs.readFileSync(path, 'utf8');
+const fs = require("fs");
+const path = "packages/excalidraw/components/App.tsx";
+let content = fs.readFileSync(path, "utf8");
 
 // 1. Add handleAltDrawDown in onKeyDown
 content = content.replace(
@@ -22,14 +22,14 @@ content = content.replace(
     }
   };
 
-  private onKeyDown = withBatchedUpdates(`
+  private onKeyDown = withBatchedUpdates(`,
 );
 
 // Call handleAltDrawDown
 content = content.replace(
   `if (event.key === KEYS.ALT) {`,
   `if (event.key === KEYS.ALT) {
-        this.handleAltDrawDown();`
+        this.handleAltDrawDown();`,
 );
 
 // 2. Add handleAltDrawUp in onKeyUp
@@ -48,7 +48,7 @@ content = content.replace(
         });
         this.handleCanvasPointerUp(ev as any);
       }
-    }`
+    }`,
 );
 
 // 3. Bypass button === 0 check in handleCanvasPointerMove
@@ -66,7 +66,7 @@ content = content.replace(
     this._handleCanvasPointerMove(event);
   };
   
-  private _handleCanvasPointerMove = (`
+  private _handleCanvasPointerMove = (`,
 );
 
 fs.writeFileSync(path, content);

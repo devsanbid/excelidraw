@@ -1,6 +1,6 @@
-const fs = require('fs');
-const path = 'packages/excalidraw/components/App.tsx';
-let content = fs.readFileSync(path, 'utf8');
+const fs = require("fs");
+const path = "packages/excalidraw/components/App.tsx";
+let content = fs.readFileSync(path, "utf8");
 
 // Insert after the HELP dialog check: `if (event.key === KEYS.QUESTION_MARK)`
 content = content.replace(
@@ -17,7 +17,7 @@ content = content.replace(
         return;
       }
 
-      if (event.key === KEYS.QUESTION_MARK) {`
+      if (event.key === KEYS.QUESTION_MARK) {`,
 );
 
 fs.writeFileSync(path, content);

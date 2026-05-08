@@ -92,7 +92,7 @@ const isPendingImageElement = (
 const getCanvasPadding = (element: ExcalidrawElement) => {
   switch (element.type) {
     case "freedraw":
-      return element.strokeWidth * 12;
+      return Math.abs(element.strokeWidth) * 12;
     case "text":
       return element.fontSize / 2;
     case "arrow":

@@ -1,4 +1,5 @@
 import React from "react";
+
 import { Excalidraw } from "../index";
 import { Keyboard } from "../tests/helpers/ui";
 import { Pointer } from "../tests/helpers/ui";
@@ -6,17 +7,15 @@ import { fireEvent, render, waitFor } from "../tests/test-utils";
 
 describe("Alt Draw feature", () => {
   it("draws and then undoes", async () => {
-    await render(
-      <Excalidraw handleKeyboardGlobally />
-    );
-    
+    await render(<Excalidraw handleKeyboardGlobally />);
+
     // wait for canvas
-    await new Promise(r => setTimeout(r, 100));
+    await new Promise((r) => setTimeout(r, 100));
     const canvas = document.querySelector("canvas");
 
     // 1. Move pointer
     fireEvent.pointerMove(canvas!, { clientX: 100, clientY: 100 });
-    
+
     // 2. Press Alt
     Keyboard.keyDown("Alt");
 
@@ -27,7 +26,7 @@ describe("Alt Draw feature", () => {
     // 4. Release Alt (should finish draw)
     Keyboard.keyUp("Alt");
 
-    await new Promise(r => setTimeout(r, 100));
+    await new Promise((r) => setTimeout(r, 100));
 
     const h = window.h;
     console.log("Elements after draw:", h.elements.length);
@@ -38,10 +37,9 @@ describe("Alt Draw feature", () => {
       Keyboard.keyUp("z");
     });
 
-    await new Promise(r => setTimeout(r, 100));
+    await new Promise((r) => setTimeout(r, 100));
     console.log("Elements after Undo:", h.elements.length);
-    
+
     expect(h.elements.length).toBe(0);
   });
 });
-

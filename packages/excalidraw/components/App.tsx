@@ -495,6 +495,7 @@ import type {
   GenerateDiagramToCode,
   NullableGridSize,
   Offsets,
+  NormalizedZoomValue,
 } from "../types";
 import type { RoughCanvas } from "roughjs/bin/canvas";
 import type { Action, ActionResult } from "../actions/types";
@@ -808,6 +809,7 @@ class App extends React.Component<AppProps, AppState> {
       zenModeEnabled,
       objectsSnapModeEnabled,
       gridModeEnabled: gridModeEnabled ?? defaultAppState.gridModeEnabled,
+        zoom: { value: 0.5 as NormalizedZoomValue },
       name,
       width: window.innerWidth,
       height: window.innerHeight,
@@ -2852,6 +2854,7 @@ class App extends React.Component<AppProps, AppState> {
       this.scene.replaceAllElements([]);
       this.setState((state) => ({
         ...getDefaultAppState(),
+      zoom: { value: 0.5 as NormalizedZoomValue },
         isLoading: opts?.resetLoadingState ? false : state.isLoading,
         theme: this.state.theme,
       }));
@@ -4710,20 +4713,28 @@ class App extends React.Component<AppProps, AppState> {
   private handleAltDrawDown = () => {
     if (!this.isAltDrawing && this.lastPointerMoveEvent) {
       this.isAltDrawing = true;
-      
+
       // Ensure state is updated synchronously so pointerdown sees it
       flushSync(() => {
-        this.setState({ activeTool: { ...this.state.activeTool, type: "freedraw", customType: null } });
+        this.setState({
+          activeTool: {
+            ...this.state.activeTool,
+            type: "freedraw",
+            customType: null,
+          },
+        });
       });
-      
-      const ev = new PointerEvent("pointerdown", { pointerId: this.lastPointerMoveEvent.pointerId || 1, pressure: 0.5, 
+
+      const ev = new PointerEvent("pointerdown", {
+        pointerId: this.lastPointerMoveEvent.pointerId || 1,
+        pressure: 0.5,
         clientX: this.lastPointerMoveEvent.clientX,
         clientY: this.lastPointerMoveEvent.clientY,
         button: 0,
         buttons: 1,
         bubbles: true,
       });
-      
+
       const reactEvent = {
         nativeEvent: ev,
         clientX: ev.clientX,
@@ -4738,22 +4749,31 @@ class App extends React.Component<AppProps, AppState> {
         ctrlKey: false,
         metaKey: false,
         target: this.interactiveCanvas,
-        type: 'pointerdown'
+        type: "pointerdown",
       };
 
       try {
-        if (this.interactiveCanvas && !(this.interactiveCanvas as any)._oldSetPointerCapture) {
-          (this.interactiveCanvas as any)._oldSetPointerCapture = this.interactiveCanvas.setPointerCapture;
+        if (
+          this.interactiveCanvas &&
+          !(this.interactiveCanvas as any)._oldSetPointerCapture
+        ) {
+          (this.interactiveCanvas as any)._oldSetPointerCapture =
+            this.interactiveCanvas.setPointerCapture;
           this.interactiveCanvas.setPointerCapture = () => {};
         }
-        
+
         try {
           this.handleCanvasPointerDown(reactEvent as any);
         } catch (e) {
           console.error("Synthetic pointer down failed:", e);
         } finally {
-          if (this.interactiveCanvas && (this.interactiveCanvas as any)._oldSetPointerCapture) {
-            this.interactiveCanvas.setPointerCapture = (this.interactiveCanvas as any)._oldSetPointerCapture;
+          if (
+            this.interactiveCanvas &&
+            (this.interactiveCanvas as any)._oldSetPointerCapture
+          ) {
+            this.interactiveCanvas.setPointerCapture = (
+              this.interactiveCanvas as any
+            )._oldSetPointerCapture;
             delete (this.interactiveCanvas as any)._oldSetPointerCapture;
           }
         }
@@ -5012,10 +5032,12 @@ class App extends React.Component<AppProps, AppState> {
 
       if (event.key.toLowerCase() === "c" && event.altKey) {
         event.preventDefault();
-        this.actionManager.executeAction(this.actionManager.actions.clearCanvas);
+        this.actionManager.executeAction(
+          this.actionManager.actions.clearCanvas,
+        );
         return;
       }
-      
+
       if (event.key.toLowerCase() === "z" && event.altKey) {
         event.preventDefault();
         this.actionManager.executeAction(this.actionManager.actions.undo);
@@ -5369,7 +5391,8 @@ class App extends React.Component<AppProps, AppState> {
     if (event.key === KEYS.ALT && this.isAltDrawing) {
       this.isAltDrawing = false;
       if (this.lastPointerMoveEvent) {
-        const ev = new PointerEvent("pointerup", { pointerId: this.lastPointerMoveEvent.pointerId || 1, 
+        const ev = new PointerEvent("pointerup", {
+          pointerId: this.lastPointerMoveEvent.pointerId || 1,
           clientX: this.lastPointerMoveEvent.clientX,
           clientY: this.lastPointerMoveEvent.clientY,
           button: 0,
@@ -5390,7 +5413,7 @@ class App extends React.Component<AppProps, AppState> {
           ctrlKey: false,
           metaKey: false,
           target: this.interactiveCanvas,
-          type: 'pointerup'
+          type: "pointerup",
         };
         try {
           this.handleCanvasPointerUp(reactEvent as any);
@@ -6795,13 +6818,13 @@ class App extends React.Component<AppProps, AppState> {
     event: React.PointerEvent<HTMLCanvasElement>,
   ) => {
     if (this.isAltDrawing) {
-       Object.defineProperty(event, 'buttons', { value: 1 });
-       Object.defineProperty(event.nativeEvent, 'buttons', { value: 1 });
-       Object.defineProperty(event.nativeEvent, 'pressure', { value: 0.5 });
+      Object.defineProperty(event, "buttons", { value: 1 });
+      Object.defineProperty(event.nativeEvent, "buttons", { value: 1 });
+      Object.defineProperty(event.nativeEvent, "pressure", { value: 0.5 });
     }
     this._handleCanvasPointerMove(event);
   };
-  
+
   private _handleCanvasPointerMove = (
     event: React.PointerEvent<HTMLCanvasElement>,
   ) => {

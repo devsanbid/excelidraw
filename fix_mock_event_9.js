@@ -1,6 +1,6 @@
-const fs = require('fs');
-const path = 'packages/excalidraw/components/App.tsx';
-let content = fs.readFileSync(path, 'utf8');
+const fs = require("fs");
+const path = "packages/excalidraw/components/App.tsx";
+let content = fs.readFileSync(path, "utf8");
 
 // Undo previous target override
 content = content.replace(
@@ -12,7 +12,7 @@ content = content.replace(
           tagName: 'CANVAS',
           parentElement: this.interactiveCanvas?.parentElement,
         },`,
-  `target: this.interactiveCanvas,`
+  `target: this.interactiveCanvas,`,
 );
 
 content = content.replace(
@@ -31,7 +31,7 @@ content = content.replace(
             this.interactiveCanvas.setPointerCapture = this.interactiveCanvas._oldSetPointerCapture;
             delete this.interactiveCanvas._oldSetPointerCapture;
           }
-        }`
+        }`,
 );
 
 fs.writeFileSync(path, content);

@@ -137,7 +137,7 @@ export const getElementsWithinSelection = (
       continue;
     }
 
-    const strokeWidth = element.strokeWidth;
+    const strokeWidth = Math.abs(element.strokeWidth);
     let labelAABB: Bounds | null = null;
     let elementAABB = getElementBounds(element, elementsMap);
 

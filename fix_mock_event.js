@@ -1,6 +1,6 @@
-const fs = require('fs');
-const path = 'packages/excalidraw/components/App.tsx';
-let content = fs.readFileSync(path, 'utf8');
+const fs = require("fs");
+const path = "packages/excalidraw/components/App.tsx";
+let content = fs.readFileSync(path, "utf8");
 
 // The original injected handleAltDrawDown looks like this:
 // const ev = new PointerEvent("pointerdown", { ... });
@@ -42,7 +42,7 @@ content = content.replace(
         type: 'pointerdown'
       };
 
-      this.handleCanvasPointerDown(reactEvent as any);`
+      this.handleCanvasPointerDown(reactEvent as any);`,
 );
 
 content = content.replace(
@@ -77,7 +77,7 @@ content = content.replace(
           target: this.interactiveCanvas,
           type: 'pointerup'
         };
-        this.handleCanvasPointerUp(ev as any);` // Need to fix this too! Wait, the script has a typo, I'll just write a cleaner regex/replace.
+        this.handleCanvasPointerUp(ev as any);`, // Need to fix this too! Wait, the script has a typo, I'll just write a cleaner regex/replace.
 );
 
 fs.writeFileSync(path, content);

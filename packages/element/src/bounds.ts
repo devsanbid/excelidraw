@@ -843,7 +843,8 @@ export const getArrowheadPoints = (
   const ys = ty - ny * minSize;
 
   if (arrowhead === "circle" || arrowhead === "circle_outline") {
-    const diameter = Math.hypot(ys - ty, xs - tx) + element.strokeWidth - 2;
+    const diameter =
+      Math.hypot(ys - ty, xs - tx) + Math.abs(element.strokeWidth) - 2;
     return [tx, ty, diameter];
   }
 

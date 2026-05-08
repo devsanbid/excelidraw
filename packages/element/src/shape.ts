@@ -163,9 +163,15 @@ export class ShapeCache {
   };
 }
 
-const getDashArrayDashed = (strokeWidth: number) => [8, 8 + strokeWidth];
+const getDashArrayDashed = (strokeWidth: number) => [
+  8,
+  8 + Math.abs(strokeWidth),
+];
 
-const getDashArrayDotted = (strokeWidth: number) => [1.5, 6 + strokeWidth];
+const getDashArrayDotted = (strokeWidth: number) => [
+  1.5,
+  6 + Math.abs(strokeWidth),
+];
 
 function adjustRoughness(element: ExcalidrawElement): number {
   const roughness = element.roughness;
@@ -195,13 +201,14 @@ export const generateRoughOptions = (
   continuousPath = false,
   isDarkMode: boolean = false,
 ): Options => {
+  const strokeWidth = Math.abs(element.strokeWidth);
   const options: Options = {
     seed: element.seed,
     strokeLineDash:
       element.strokeStyle === "dashed"
-        ? getDashArrayDashed(element.strokeWidth)
+        ? getDashArrayDashed(strokeWidth)
         : element.strokeStyle === "dotted"
-        ? getDashArrayDotted(element.strokeWidth)
+        ? getDashArrayDotted(strokeWidth)
         : undefined,
     // for non-solid strokes, disable multiStroke because it tends to make
     // dashes/dots overlay each other
@@ -209,14 +216,12 @@ export const generateRoughOptions = (
     // for non-solid strokes, increase the width a bit to make it visually
     // similar to solid strokes, because we're also disabling multiStroke
     strokeWidth:
-      element.strokeStyle !== "solid"
-        ? element.strokeWidth + 0.5
-        : element.strokeWidth,
+      element.strokeStyle !== "solid" ? strokeWidth + 0.5 : strokeWidth,
     // when increasing strokeWidth, we must explicitly set fillWeight and
     // hachureGap because if not specified, roughjs uses strokeWidth to
     // calculate them (and we don't want the fills to be modified)
-    fillWeight: element.strokeWidth / 2,
-    hachureGap: element.strokeWidth * 4,
+    fillWeight: strokeWidth / 2,
+    hachureGap: strokeWidth * 4,
     roughness: adjustRoughness(element),
     stroke: isDarkMode
       ? applyDarkModeFilter(element.strokeColor)
@@ -335,7 +340,7 @@ const getArrowheadLineOptions = (
 
   if (element.strokeStyle === "dotted") {
     // for dotted arrows caps, reduce gap to make it more legible
-    const dash = getDashArrayDotted(element.strokeWidth - 1);
+    const dash = getDashArrayDotted(Math.abs(element.strokeWidth) - 1);
     lineOptions.strokeLineDash = [dash[0], dash[1] - 1];
   } else {
     // for solid/dashed, keep solid arrow cap
@@ -1190,7 +1195,7 @@ export const getFreedrawOutlinePoints = (
 
   return getStroke(inputPoints as number[][], {
     simulatePressure: element.simulatePressure,
-    size: element.strokeWidth * 4.25,
+    size: Math.abs(element.strokeWidth) * 4.25,
     thinning: 0.6,
     smoothing: 0.5,
     streamline: 0.5,
